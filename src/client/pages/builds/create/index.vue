@@ -3,7 +3,7 @@
     <v-flex xs12 xl6>
       <v-card>
         <v-card-title>
-          <h1 class="display-2">Create a build</h1>
+          <h1 class="font-weight-bold display-2">Create a build</h1>
         </v-card-title>
         <v-card-text>
           <p class="font-weight-medium">Name your build and give it a type.</p>
@@ -19,7 +19,8 @@
               <v-select 
                 outline
                 :items="buildTypes"
-                label="Build type"
+                label="build type"
+                v-model="build.type"
               ></v-select>
             </v-flex>
             <v-flex xs12 sm6>
@@ -28,6 +29,7 @@
                   <v-select
                     :items="races"
                     label="player race"
+                    v-model="build.races.player"
                     outline
                     >
                   </v-select>
@@ -36,6 +38,7 @@
                   <v-select
                     :items="races"
                     label="opponent race"
+                    v-model="build.races.opponent"
                     outline
                     >
                   </v-select>
@@ -53,6 +56,7 @@
               </v-tooltip>
 
               <!-- Steps Component -->
+              <!-- TODO: Make this a draggable list with this https://github.com/SortableJS/Vue.Draggable -->
               <v-card
                 :key="index" 
                 v-model="build.steps" 
@@ -87,7 +91,7 @@
                   </v-layout>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn small icon color="red"><v-icon>delete</v-icon></v-btn>
+                  <v-btn @click="removeStep(index)"small icon color="red"><v-icon>delete</v-icon></v-btn>
                 </v-card-actions>
               </v-card>
             </v-flex>
@@ -103,7 +107,7 @@
               <template>
                 <v-expansion-panel>
                   <v-expansion-panel-content>
-                    <div slot="header" class="font-weight-medium">preview</div>
+                    <div slot="header" class="font-weight-medium">formatted preview</div>
                     <v-card>
                       <v-card-text v-html="compiledMarkdown"></v-card-text>
                     </v-card>
@@ -145,6 +149,10 @@ export default {
       build: {
         name: '',
         analysis: '',
+        races: {
+          player: '',
+          opponent: ''
+        }
       },
       buildTypes: [
         'economy',
@@ -186,6 +194,15 @@ export default {
       _.debounce(function (e) {
         this.input = e.target.value
       }, 300)
+    },
+    removeStep (index) {
+      return this.steps.splice(index, 1)
+    },
+    moveUp (item) {
+
+    },
+    moveDown (item) {
+
     }
   },
   computed: {

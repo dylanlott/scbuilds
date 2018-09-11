@@ -9,6 +9,21 @@ const stepTypes = [
   'units'
 ]
 
+const buildTypes = [
+  'economy',
+  'rush',
+  'all-in',
+  'max-out',
+  'aggressive',
+  'fast-expand',
+  'general'
+]
+
+const races = [
+  'zerg',
+  'protoss',
+  'terran'
+]
 // step example: {
 //   action: 'build scv',
 //   value: '200',
@@ -33,16 +48,6 @@ const stepSchema = new mongoose.Schema({
     type: String
   }
 })
-
-const buildTypes = [
-  'economy',
-  'rush',
-  'all-in',
-  'max-out',
-  'aggressive',
-  'fast-expand',
-  'general'
-]
 
 const buildSchema = new mongoose.Schema({
   name: {
@@ -76,11 +81,11 @@ const buildSchema = new mongoose.Schema({
   races: {
     player: {
       type: String,
-      require: true
+      enum: races
     },
     opponent: {
       type: String,
-      require: true
+      enum: races
     }
   },
   game: {
