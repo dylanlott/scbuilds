@@ -1,11 +1,11 @@
 <template>
-  <v-app id="inspire">
+  <v-app dark id="inspire">
     <v-navigation-drawer
       fixed
+      dark
       enable-resize-watcher
       disable-route-watcher
       persistent
-      :mini-variant.sync="mini"
       v-model="drawer"
       v-if="$store.state.user.isAuthenticated"
       app>
@@ -16,42 +16,32 @@
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
-              {{name}}
-              </v-list-tile-title>
+              {{ $store.state.user.email }}
+            </v-list-tile-title>
           </v-list-tile-content>
-          <v-list-tile-action icon>
-            <v-btn icon light @click.stop="mini = !mini">
-              <v-icon light>chevron_left</v-icon>
-            </v-btn>
-          </v-list-tile-action>
         </v-list-tile>
       </v-list>
-      <v-list>
-        <v-list-group v-for="item in items" :value="item.active" v-bind:key="item.title">
-          <v-list-tile slot="item" :ripple="!item.items" :router="!item.items" :to="item.to ? item.to : ''">
-            <v-list-tile-action icon light>
-              <v-icon icon light>{{ item.action }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action v-if="item.items">
-              <v-icon light>keyboard_arrow_down</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-list-tile v-for="subItem in item.items" v-bind:key="subItem.title" ripple>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-icon>{{ subItem.action }}</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list-group>
+      <v-list dense>
+        <v-list-tile to="/">
+          <v-list-tile-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Dashboard</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile to="/builds">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Builds</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar app fixed>
-      <v-toolbar-side-icon v-if="$store.state.user.isAuthenticated" light @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar dark app fixed>
+      <v-toolbar-side-icon dark color="purple lighten-1" v-if="$store.state.user.isAuthenticated" light @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>{{name}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left>
@@ -78,14 +68,14 @@
       </v-menu>
     </v-toolbar>
     <v-content app clipped-left>
-      <v-container fluid fill-height>
+      <v-container fluid>
         <v-layout>
           <nuxt></nuxt>
         </v-layout>
       </v-container>
     </v-content>
-    <v-footer light app>
-      <span>&copy; 2017</span>
+    <v-footer dark app>
+      <span>&copy; 2017 - Powered by Hivemind Apps</span>
     </v-footer>
     <v-snackbar
       :timeout="3000"
@@ -109,28 +99,7 @@ export default {
   data () {
     return {
       drawer: null,
-      items: [
-        {
-          action: 'android',
-          title: 'Something',
-          items: [
-            { title: 'First' },
-            { title: 'Second' },
-            { title: 'Third' }
-          ]
-        },
-        {
-          action: 'settings',
-          title: 'Settings',
-          items: [
-            { title: 'Payment' },
-            { title: 'Account' },
-            { title: 'Privacy' }
-          ]
-        }
-      ],
-      name: 'scbuilds',
-      mini: true,
+      name: 'Overlord',
       right: null
     }
   },

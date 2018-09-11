@@ -1,10 +1,9 @@
 <template>
   <v-container fluid>
     <v-layout justify-center align-center>
-      <v-flex xs12 sm10 md8 lg6 xl6>
+      <v-flex xs12>
         <v-container v-if="$store.state.user.isAuthenticated">
-          Authenticated: <pre>{{ $store.state.user }}</pre>
-          <img id="logo" :src="vueniverseLogo" alt="vueniverse_logo.svg">
+          <h1>Welcome {{ $store.state.user.username }}!</h1>
         </v-container>
         <v-container v-else align="center">
           <h1 class="text-xs-center display-3">SC Builds</h1>

@@ -1,23 +1,48 @@
 import mongoose from 'mongoose'
 import { ServerError } from 'express-server-error'
 
-const stepSchema = new mongoose.Schema({
-  action: { type: String },
-  comment: { type: String },
-  time: { type: String },
-  supply: { type: String },
-  minerals: { type: String  },
-  gas: { type: String }
-})
+const stepTypes = [
+  'mineral',
+  'gas',
+  'supply',
+  'time',
+  'units'
+]
 
 // step example: {
-//  action: 'build hatch' or 'attack enemy' or 'scout for gateway'
-//  comment: 'this should be timed out with your spawn pool finishing'
-//  time: '3:00'
-//  supply: 20/28
-//  minerals: as soon as you have 200
-//  gas: as soon as possible or at @300
+//   action: 'build scv',
+//   value: '200',
+//   type: 'mineral',
+//   comment: 'build this as soon as you hit 200'
 // }
+const stepSchema = new mongoose.Schema({
+  action: {
+    type: String,
+    require: true
+  },
+  value: {
+    type: String,
+    require: true
+  },
+  type: {
+    type: String,
+    enum: stepTypes,
+    default: 'mineral'
+  },
+  comment: {
+    type: String
+  }
+})
+
+const buildTypes = [
+  'economy',
+  'rush',
+  'all-in',
+  'max-out',
+  'aggressive',
+  'fast-expand',
+  'general'
+]
 
 const buildSchema = new mongoose.Schema({
   name: {
@@ -25,8 +50,19 @@ const buildSchema = new mongoose.Schema({
     require: true,
     minlength: 3
   },
-  description: {
+  owner: {
+    // Is this a build of the user's
+    // creation or someone else's?
+    type: Boolean,
+    default: false
+  },
+  analysis: {
     type: String
+  },
+  type: {
+    type: String,
+    enum: buildTypes,
+    default: 'general'
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -56,7 +92,19 @@ const buildSchema = new mongoose.Schema({
       up: { type: Number, default: 0 },
       down: { type: Number, default: 0 }
     },
-    likes: { type: Number, default: 0 }
+    likes: { type: Number, default: 0 },
+    examples: [{
+      name: String,
+      comment: String,
+      link: String
+    }],
+    comments: [{
+      user: { type: String, require: true },
+      comment: { require: true, type: String },
+      createdAt: { type: Date, default: Date.now },
+      deleted: { type: Boolean, default: false },
+      flagged: { type: Boolean, default: false }
+    }]
   }
 }, {
   timestamps: true

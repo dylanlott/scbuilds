@@ -4,7 +4,8 @@ import jwtDecode from 'jwt-decode'
 export const state = () => {
   return {
     lists: {
-      users: []
+      users: [],
+      builds: []
     }
   }
 }
@@ -30,6 +31,15 @@ export const mutations = {
   FETCH_ALL_USERS_FAILURE (state, error) {
     console.error(error.response.data)
   },
+  FETCH_ALL_BUILDS_REQUEST (state) {
+    console.log('Fetching all builds...')
+  },
+  FETCH_ALL_BUILDS_SUCCESS (state, data) {
+    state.lists.builds = data
+  },
+  FETCH_ALL_BUILDS_FAILURE (state, error) {
+    console.error(error.response.data)
+  },
   CLEAR_LISTS (state) {
     // set each list to an empty array
     Object.keys(state.lists).forEach(list => {
@@ -51,6 +61,16 @@ export const actions = {
       commit('FETCH_ALL_USERS_REQUEST')
       let { data } = await axios.get('/users')
       commit('FETCH_ALL_USERS_SUCCESS', data)
+    } catch (error) {
+      commit('FETCH_ALL_USERS_FAILURE', error)
+    }
+  },
+
+  async fetchAllBuilds ({ commit, state }) {
+    try {
+      commit('FETCH_ALL_BUILDS_REQUEST')
+      let { data } = await axios.get('/builds')
+      commit('FETCH_ALL_BUILDS_SUCCESS', data)
     } catch (error) {
       commit('FETCH_ALL_USERS_FAILURE', error)
     }
