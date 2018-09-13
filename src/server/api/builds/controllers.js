@@ -13,13 +13,15 @@ export const index = {
   },
 
   async post (req, res) {
-    try {
-      let _build = new Build(req.body)
-      let build = await _build.save()
-      res.json(build)
-    } catch (error) {
-      res.hanldeServerError(error)
-    }
+    const build = new Build(req.body)
+    console.log('BUILD:', build)
+    return build.save()
+      .then((saved) => {
+        console.log('saved: ', saved)
+        return res.status(201).json(saved)
+      }).catch((err) => ServerError('Build not created.',
+        {status: 500}
+      ))
   }
 }
 

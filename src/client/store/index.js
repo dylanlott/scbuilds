@@ -35,6 +35,7 @@ export const mutations = {
     console.log('Fetching all builds...')
   },
   FETCH_ALL_BUILDS_SUCCESS (state, data) {
+    console.log('got builds: ', data)
     state.lists.builds = data
   },
   FETCH_ALL_BUILDS_FAILURE (state, error) {

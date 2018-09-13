@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { ServerError } from 'express-server-error'
 
 const stepTypes = [
-  'mineral',
+  'minerals',
   'gas',
   'supply',
   'time',
@@ -15,6 +15,7 @@ const buildTypes = [
   'all-in',
   'max-out',
   'aggressive',
+  'timing',
   'fast-expand',
   'general'
 ]
@@ -24,12 +25,7 @@ const races = [
   'protoss',
   'terran'
 ]
-// step example: {
-//   action: 'build scv',
-//   value: '200',
-//   type: 'mineral',
-//   comment: 'build this as soon as you hit 200'
-// }
+
 const stepSchema = new mongoose.Schema({
   action: {
     type: String,

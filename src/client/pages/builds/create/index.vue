@@ -3,7 +3,7 @@
     <v-flex xs12 xl6>
       <v-card>
         <v-card-title>
-          <h1 class="font-weight-bold display-2">Create a build</h1>
+          <h1 class="font-weight-bold display-2 ">Create a build</h1>
         </v-card-title>
         <v-card-text>
           <p class="font-weight-medium">Name your build and give it a type.</p>
@@ -30,8 +30,7 @@
                     :items="races"
                     label="player race"
                     v-model="build.races.player"
-                    outline
-                    >
+                    outline>
                   </v-select>
                 </v-flex>
                 <v-flex>
@@ -40,66 +39,87 @@
                     label="opponent race"
                     v-model="build.races.opponent"
                     outline
-                    >
-                  </v-select>
+                    ></v-select>
                 </v-flex>
               </v-layout>
             </v-flex>
             <v-flex xs12 my-3>
-              <h2>Steps</h2>
-              <p>Add timings, make notes on supply, and walk through each step.</p>
-              <v-tooltip top open-delay="500">
-                <v-btn color="purple lighten-2" slot="activator" outline @click="addBlankStep()">
-                  Add A Step
-                </v-btn>
-                <span>Pro Tip: Hit `enter` while typing in the form to spawn another action.</span>
-              </v-tooltip>
-
-              <!-- Steps Component -->
-              <!-- TODO: Make this a draggable list with this https://github.com/SortableJS/Vue.Draggable -->
-              <v-card
-                :key="index" 
-                v-model="build.steps" 
-                @keyup.enter="addBlankStep()" 
-                v-for="(step, index) in steps">
-                <v-card-text>
-                  <v-layout row wrap>
-                    <v-flex xs-3 class="mx-1">
-                      <v-text-field 
-                        :label="step.action || 'Action name'" 
-                        :v-model="step.action">
-                      </v-text-field>
-                    </v-flex>
-                    <v-flex xs-3 class="mx-1">
-                      <v-text-field 
-                        label="@" 
-                        :v-model="step.value">
-                      </v-text-field>
-                    </v-flex>
-                    <v-flex xs-3 class="mx-1">
-                      <v-select
-                        :items="types"
-                        label="Types"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs-3 class="mx-1">
-                      <v-text-field
-                        :label="step.comment || 'Comment'"
-                        :v-model="step.comment"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn @click="removeStep(index)"small icon color="red"><v-icon>delete</v-icon></v-btn>
-                </v-card-actions>
-              </v-card>
+              <h2 class="font-weight-bold display-1">Steps</h2>
+              <p class="font-weight-thin">Add timings, make notes on supply, and walk through each step</p>
+              <p class="font-weight-thin">Hit enter after filling out each step to add it.</p>
+            </v-flex>
+            <v-flex>
+              <v-layout row wrap>
+                <v-flex xs12 sm6 md3 lg2 mr-3>
+                  <v-text-field 
+                    box
+                    @keyup.enter="addStep(step)"
+                    label="action"
+                    :rules="actionRules"
+                    v-model="step.action"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm5 md3 lg2 mr-3>
+                  <v-text-field 
+                    box
+                    @keyup.enter="addStep(step)"
+                    :rules="valueRules"
+                    label="value" 
+                    v-model="step.value"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm5 md3 lg2 mr-3>
+                  <v-select
+                    box
+                    label="type"
+                    :rules="typeRules"
+                    v-model="step.type"
+                    :items="types"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs12 sm6 md3 lg2 mr-3>
+                  <v-text-field 
+                    box
+                    @keyup.enter="addStep(step)"
+                    label="comment" 
+                    v-model="step.comment"
+                  ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-btn color="purple lighten-1" outline large @click="addStep(step)">add step</v-btn>
+              </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex>
+              <v-layout row wrap>
+                <v-flex>
+                  <h3>Build Order</h3>
+                  <v-card dense v-for="(step, index) in steps" :key="index">
+                    <v-card-text>
+                      <v-layout column>
+                        <v-flex v-if="step.action" class="font-weight-bold">
+                          <v-icon small color="purple lighten-1">star</v-icon>
+                          {{ step.action }} 
+                          @ {{step.value}} 
+                          {{step.type}}
+                        </v-flex>
+                        <v-flex v-if="step.comment !== ''" class="font-weight-thin">{{ step.comment }}</v-flex>
+                        <v-flex v-if="steps.length === 0 || !steps">No steps added yet.</v-flex>
+                        <v-divider></v-divider>
+                      </v-layout>
+                    </v-card-text>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex>
+              <h3 class="font-weight-bold display-1">Analysis & Details</h3>
             </v-flex>
             <v-flex xs12>
               <v-textarea
                 outline
-                @input="updateDescription"
-                label="description" 
+                @input="updateAnalysis"
+                label="analysis" 
                 v-model="build.analysis"
               ></v-textarea>
             </v-flex>
@@ -172,13 +192,23 @@ export default {
         comment: ''
       },
       types: [
-        'mineral',
+        'minerals',
         'gas',
         'supply',
         'time',
         'units'
       ],
-      steps: []
+      step: {
+        action: '',
+        type: '',
+        value: '',
+        comment: ''
+      },
+      steps: [],
+      actionRules: [v => !!v || 'action is required.'],
+      typeRules: [v => !!v || 'type is required.'],
+      valueRules: [v => !!v || 'value is required.'],
+      actions: [],
     }
   },
   methods: {
@@ -187,10 +217,16 @@ export default {
     },
     submit () {
       const _build = this.build
+      _build.steps = this.steps
       console.log('Creating build...', _build)
-      // this.$store.dispatch('builds/create')
+      this.$store.dispatch('build/createBuild', _build)
+        .then(() => {
+          if (this.$store.state.notification.success) {
+            this.$router.replace({ name: 'index' })
+          }
+        })
     },
-    updateDescription () {
+    updateAnalysis () {
       _.debounce(function (e) {
         this.input = e.target.value
       }, 300)
@@ -198,11 +234,14 @@ export default {
     removeStep (index) {
       return this.steps.splice(index, 1)
     },
-    moveUp (item) {
-
-    },
-    moveDown (item) {
-
+    addStep (step) {
+      this.steps.push(step)
+      this.step = {
+        action: '',
+        type: '',
+        value: '',
+        comment: ''
+      }
     }
   },
   computed: {

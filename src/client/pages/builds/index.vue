@@ -9,14 +9,13 @@
             <v-btn outline to="/builds/create" color="purple">Create A Build</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text>
-          <v-list>
-            <template 
-              v-for="(item, index) in $store.state.lists.bands">
-              <v-list-tile>{{ item }}</v-list-tile>
-            </template>
-          </v-list>
-        </v-card-text>
+        <v-card :key="build._id" v-for="build in $store.state.lists.builds">
+          <v-card-title class="font-weight-black">
+            <v-icon>play_arrow</v-icon><h2><nuxt-link 
+                :to="url(build)"
+            >{{ build.name }}</nuxt-link></h2>
+          </v-card-title>
+        </v-card>
       </v-card>
     </v-flex>
   </v-container>
@@ -28,6 +27,11 @@ export default {
   },
   fetch ({ store }) {
     return store.dispatch('fetchAllBuilds')
+  },
+  methods: {
+    url: function (build) {
+      return `/builds/${build._id}`
+    }
   }
 }
 </script>
