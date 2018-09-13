@@ -2,7 +2,7 @@ import axios from '~/plugins/axios'
 
 export const state = () => {
   return {
-    build: {}
+    details: {}
   }
 }
 
@@ -36,7 +36,8 @@ export const mutations = {
   },
 
   GET_BUILD_SUCCESS (state, data) {
-    state.build = data
+    console.log('setting build details: ', data)
+    state.details = data
   },
 
   GET_BUILD_FAILURE (state, error) {
