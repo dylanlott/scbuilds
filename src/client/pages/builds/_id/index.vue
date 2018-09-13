@@ -6,14 +6,7 @@
   </v-container>
 </template>
 <script>
-import { Route } from 'vue-router'
-
 export default {
-  data () {
-    return {
-      build: {}
-    }
-  },
   fetch ({ store, params }) {
     store.dispatch('build/getOneBuild', params.id)
   },

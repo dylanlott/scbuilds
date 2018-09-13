@@ -1,5 +1,5 @@
 <template>
-  <v-card class="grey lighten-4 elevation-3">
+  <v-card class="elevation-3">
     <v-container fluid>
       <form @keyup.enter="submit">
         <v-text-field

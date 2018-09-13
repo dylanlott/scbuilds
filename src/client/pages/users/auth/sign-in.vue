@@ -2,10 +2,10 @@
   <v-container>
     <v-layout justify-center align-center>
       <v-flex xs12 sm10 md8 lg6 xl6>
-        <h3>Sign In</h3>
+        <h1>Sign In</h1>
         <sign-in-form :redirect="redirect"></sign-in-form>
         <br>
-        <p>Don't have an account? <nuxt-link :to="{ name: 'users-auth-sign-up' }">Sign up!</nuxt-link></p>
+        <p>Don't have an account? <nuxt-link :to="{ name: 'users-auth-sign-up' }"><b>Sign up!</b></nuxt-link></p>
       </v-flex>
     </v-layout>
   </v-container>
