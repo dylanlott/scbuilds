@@ -2,40 +2,40 @@ importScripts('/_nuxt/workbox.42554690.js')
 
 workbox.precaching.precacheAndRoute([
   {
-    "url": "/_nuxt/app.92d6e4071862e8149cfe.js",
-    "revision": "a291d1460cc1303a1464e9c47322c001"
+    "url": "/_nuxt/app.37a667d1ea3ab20426c9.js",
+    "revision": "f7f564780c68e74bb3cb334d83d1b2c8"
   },
   {
     "url": "/_nuxt/app.c65cac958abec7941d065a7305fe8b41.css",
     "revision": "c65cac958abec7941d065a7305fe8b41"
   },
   {
-    "url": "/_nuxt/layouts/default.32f6ea85cee8c277d465.js",
-    "revision": "08ec7f6f7252e390a8bb4443b6454d1c"
+    "url": "/_nuxt/layouts/default.d6195526633b528f3c59.js",
+    "revision": "daf94d13ff24787973d5117d05fab8a6"
   },
   {
-    "url": "/_nuxt/manifest.02739bd26e9c84805bcc.js",
-    "revision": "3fc0a0f2e03b0a44a464bb7e36deeb0b"
+    "url": "/_nuxt/manifest.4d073104136f376119ae.js",
+    "revision": "18c915d44df7a5d31203367ec0996fcf"
   },
   {
-    "url": "/_nuxt/pages/admin/index.a16d8a79db42221e9ed4.js",
-    "revision": "73e603466223b15284543ab857543ac5"
+    "url": "/_nuxt/pages/admin/index.6afc2fe5ba066492370a.js",
+    "revision": "aaf90418698f9124dd76cb3cd76406b9"
   },
   {
-    "url": "/_nuxt/pages/builds/_id/index.c49101c4417f0d39ecbe.js",
-    "revision": "56412c261a198c659fb920fc93f8c6c9"
+    "url": "/_nuxt/pages/builds/_id/index.c431b39aa7d756d050b2.js",
+    "revision": "205a90922378539fecdb712fe8387f19"
   },
   {
-    "url": "/_nuxt/pages/builds/create/index.d865534ace883541ea78.js",
-    "revision": "f16257caa44665afca401a19176a83c1"
+    "url": "/_nuxt/pages/builds/create/index.f693a1ab3786da19bef9.js",
+    "revision": "b06cb61bf9aefc0a0d8b8e8d572c79aa"
   },
   {
-    "url": "/_nuxt/pages/builds/index.0418e857765527894fa7.js",
-    "revision": "538a1fa2c9102e91783ff6d0607d7d42"
+    "url": "/_nuxt/pages/builds/index.b5d2cda3e9f71e09db73.js",
+    "revision": "7ebbbbd709e24eb8974d9ea8dee45ee4"
   },
   {
-    "url": "/_nuxt/pages/index.22c09b83eebf73dff8ca.js",
-    "revision": "720e11b3a2554ba8dc75e33efad76d60"
+    "url": "/_nuxt/pages/index.104df604c0db6a47b82a.js",
+    "revision": "6ab2dcd223b6f97aa7cfb7d3478fdb86"
   },
   {
     "url": "/_nuxt/pages/users/_username/index.c36e7f9f39602795ba48.js",
