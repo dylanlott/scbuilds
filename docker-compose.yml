@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  mongodb:
+    image: 'bitnami/mongodb:3.6'
+    restart: always
+    networks:
+      - overlord
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'mongodb_data:/bitnami'
+    environment:
+      - MONGODB_USERNAME=shakezulaadmin
+      - MONGODB_PASSWORD=1vR6GPLwwrkeguLemZkAtvCcYjMWqVhoVvd4jqZcKeKbFHdbLB8tgsgGazZYSPyv
+      - MONGODB_DATABASE=overlord
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    networks: 
+      - overlord
+    ports: 
+      - '3000:3000'
+    env_file:
+      - ./.prod.env
+
+networks:
+  overlord:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
