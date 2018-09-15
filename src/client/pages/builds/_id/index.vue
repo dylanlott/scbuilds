@@ -25,33 +25,33 @@
           <v-flex v-html="build.analysis"></v-flex>
           <v-flex><h2>Build Order</h2></v-flex>
           <v-flex>
-            <v-list>
+            <v-list dense>
               <v-list-tile
                 v-for="(step, index) in build.steps"
                 :key="index"
                 >
-                <v-list-tile-avatar>
-                  <v-icon>star
-                  </v-icon>
-                </v-list-tile-avatar>
-
                 <v-list-tile-content>
-                  <v-flex>
-                     - {{ step.action }}
-                  </v-flex>
+                  <v-layout row wrap>
+                    <v-flex>
+                      {{ step.action }}
+                    </v-flex>
 
-                  <v-flex>
-                    @ {{ step.value }}
-                  </v-flex>
-                  
-                  <v-flex>
-                    {{ step.type }}
-                  </v-flex>
+                    <v-flex>
+                      @ {{ step.value }}
+                    </v-flex>
+                    
+                    <v-flex>
+                      {{ step.type }}
+                    </v-flex>
 
-                  <v-flex>
-                    {{ step.comment }}
-                  </v-flex>
+                    <v-flex>
+                      {{ step.comment }}
+                    </v-flex>
+                  </v-layout>
                 </v-list-tile-content>
+                <v-list-tile-actions>
+
+                </v-list-tile-actions>
               </v-list-tile>
             </v-list>
           </v-flex>

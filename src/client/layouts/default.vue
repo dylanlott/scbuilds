@@ -45,8 +45,8 @@
       <v-toolbar-title>{{name}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left>
-        <v-btn icon="icon" slot="activator" light>
-          <v-icon>more_vert</v-icon>
+        <v-btn flat icon="icon" slot="activator" light>
+          <v-icon color="purple lighten-1">more_vert</v-icon>
         </v-btn>
         <v-list>
           <v-list-tile ripple router to="/users/auth/sign-in" v-if="!$store.state.user.isAuthenticated">
@@ -68,11 +68,9 @@
       </v-menu>
     </v-toolbar>
     <v-content app clipped-left>
-      <v-container fluid>
-        <v-layout>
-          <nuxt></nuxt>
-        </v-layout>
-      </v-container>
+      <v-layout>
+        <nuxt></nuxt>
+      </v-layout>
     </v-content>
     <v-footer dark app>
       <span>&copy; 2017 - Powered by Hivemind Apps</span>
