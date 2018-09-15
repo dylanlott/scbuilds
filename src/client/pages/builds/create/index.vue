@@ -181,7 +181,8 @@ export default {
         'max-out',
         'aggressive',
         'fast-expand',
-        'general'
+        'general',
+        'timing'
       ],
       tag: '',
       tags: [],
@@ -205,6 +206,7 @@ export default {
         comment: ''
       },
       steps: [],
+      stepRules: [v => v.length > 0 || 'At least one step is required'],
       actionRules: [v => !!v || 'action is required.'],
       typeRules: [v => !!v || 'type is required.'],
       valueRules: [v => !!v || 'value is required.'],

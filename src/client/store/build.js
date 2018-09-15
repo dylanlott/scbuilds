@@ -48,11 +48,11 @@ export const mutations = {
 export const actions = {
   async createBuild({ commit }, payload) {
     try {
-      commit('build/CREATE_BUILD_REQUEST')
+      commit('CREATE_BUILD_REQUEST')
       let { data } = await axios.post('/builds', payload)
-      commit('build/CREATE_BUILD_SUCCESS', data, { root: true })
+      commit('CREATE_BUILD_SUCCESS', data, { root: true })
     } catch (error) {
-      commit('build/CREATE_BUILD_FAILURE')
+      commit('CREATE_BUILD_FAILURE')
       commit('notification/FAILURE', error.response.data, { root: true })
     }
   },
