@@ -8,6 +8,9 @@ router.route('/')
   .get(index.get) // public route
   .post(authenticate(), index.post)
 
+router.route('/search')
+  .get(index.search)
+
 router.route('/:id')
   .get(id.get) // public route
   .put(authenticate(), id.update)
