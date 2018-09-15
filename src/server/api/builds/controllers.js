@@ -14,15 +14,35 @@ export const index = {
 
   async post (req, res) {
     const build = new Build(req.body)
-    console.log('BUILD:', build)
+    build.user = req.user.email
+    console.log('build pre save: ', build)
     return build.save()
-      .then((saved) => {
-        console.log('saved: ', saved)
-        return res.status(201).json(saved)
-      }).catch((err) => ServerError('Build not created.',
-        {status: 500}
-      ))
+      .then((saved) => res.status(201).send({
+        data: 'build created'
+      }))
+      .catch((err) => {
+        console.log('Error saving build: ', err)
+        throw new ServerError('Build not created.',{status: 500})
+      })
+  },
+
+  search (req, res) {
+    Build.search({
+      query_string: {
+        query: req.query.search
+      }
+    }, {
+      hydrate: true
+    }, function (err, results) {
+      if (err) {
+        console.log('error searching builds: ', err)
+        return new ServerError('Error searching builds', {status: 500})
+      }
+      console.log('build search results: ', results)
+      return res.json(results)
+    })
   }
+
 }
 
 export const id = {

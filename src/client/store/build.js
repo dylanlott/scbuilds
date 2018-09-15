@@ -15,7 +15,7 @@ export const mutations = {
     console.log('successfully created build', data)
   },
 
-  CREATE_BUILD_FAILURE (state) {
+  CREATE_BUILD_FAILURE (state, error) {
     console.log('Create build failure.', error.response.data)
   },
 
@@ -51,6 +51,7 @@ export const actions = {
       commit('CREATE_BUILD_REQUEST')
       let { data } = await axios.post('/builds', payload)
       commit('CREATE_BUILD_SUCCESS', data, { root: true })
+      commit('notification/SUCCESS', data, { root: true })
     } catch (error) {
       commit('CREATE_BUILD_FAILURE')
       commit('notification/FAILURE', error.response.data, { root: true })

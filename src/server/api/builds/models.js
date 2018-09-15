@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import mongoosastic from 'mongoosastic'
 import { ServerError } from 'express-server-error'
 
 const stepTypes = [
@@ -49,44 +50,45 @@ const buildSchema = new mongoose.Schema({
   name: {
     type: String,
     require: true,
-    minlength: 3
-  },
-  owner: {
-    // Is this a build of the user's
-    // creation or someone else's?
-    type: Boolean,
-    default: false
+    minlength: 3,
+    es_indexed: true
   },
   analysis: {
-    type: String
+    type: String,
+    es_indexed: true
   },
   type: {
     type: String,
     enum: buildTypes,
-    default: 'general'
+    default: 'general',
+    es_indexed: true
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    require: true
+    type: String,
+    require: true,
+    es_indexed: true
   },
   tags: [{
-    type: String
+    type: String,
+    es_indexed: true
   }],
   steps: [stepSchema],
   races: {
     player: {
       type: String,
-      enum: races
+      enum: races,
+      es_indexed: true
     },
     opponent: {
       type: String,
-      enum: races
+      enum: races,
+      es_indexed: true
     }
   },
   game: {
     type: String,
-    require: true
+    require: true,
+    es_indexed: true
   },
   meta: {
     votes: {
@@ -111,6 +113,22 @@ const buildSchema = new mongoose.Schema({
   timestamps: true
 })
 
+buildSchema.plugin(mongoosastic, {
+  host: process.env.ELASTIC_HOST,
+  port: process.env.ELASTIC_PORT,
+  auth: process.env.ELASTIC_AUTH
+})
+
 const Build = mongoose.model('Build', buildSchema)
+
+Build.createMapping(function (err, mapping) {
+  if (err) {
+    console.log('error creating mapping (you can safely ignore this)');
+    console.log(err);
+  } else {
+    console.log('mapping created!');
+    console.log(mapping);
+  }
+});
 
 export default Build

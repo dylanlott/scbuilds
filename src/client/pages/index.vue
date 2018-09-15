@@ -9,23 +9,27 @@
             <h1>Welcome {{ $store.state.user.username }}!</h1>
           </v-container>
           <v-container fluid v-else align-center>
-
-            <div class="text-xs-center">
-            <!-- <img id="logo" :src="vueniverseLogo" alt="vueniverse_logo.svg"> -->
-            <h1 class="text-xs-center display-3">Overlord</h1>
-            <h2>the starcraft build tracker, creator, and explorer.</h2>
-              <v-btn
-                rounded
-                dark
-                color="purple lighten-1"
-                to="/users/auth/sign-up">Sign Up
-              </v-btn>
-              or
-              <v-btn
-                outline
-                color="purple"
-                to="/users/auth/sign-in">Sign In
-              </v-btn>
+            <div class="text-xs-center pt-4">
+              <v-flex>
+                <h1 class="text-xs-center display-4 font-weight-black">overlord</h1>
+                <h1 class="display-1">the starcraft build tracker, creator, and explorer.</h1>,
+              </v-flex>
+              <v-flex>
+                <v-btn
+                  rounded
+                  dark
+                  color="purple lighten-1"
+                  large
+                  to="/users/auth/sign-up">Sign Up
+                </v-btn>
+                or
+                <v-btn
+                  outline
+                  color="purple"
+                  large
+                  to="/users/auth/sign-in">Sign In
+                </v-btn>
+              </v-flex>
             </div>
           </v-container>
         </v-flex>
@@ -40,7 +44,6 @@ import header from '~/assets/img/header.jpg'
 export default {
   data () {
     return {
-      vueniverseLogo,
       header
     }
   }

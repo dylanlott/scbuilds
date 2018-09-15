@@ -55,7 +55,6 @@
                     box
                     @keyup.enter="addStep(step)"
                     label="action"
-                    :rules="actionRules"
                     v-model="step.action"
                   ></v-text-field>
                 </v-flex>
@@ -63,7 +62,6 @@
                   <v-text-field 
                     box
                     @keyup.enter="addStep(step)"
-                    :rules="valueRules"
                     label="value" 
                     v-model="step.value"
                   ></v-text-field>
@@ -72,7 +70,6 @@
                   <v-select
                     box
                     label="type"
-                    :rules="typeRules"
                     v-model="step.type"
                     :items="types"
                   ></v-select>
@@ -224,7 +221,7 @@ export default {
       this.$store.dispatch('build/createBuild', _build)
         .then(() => {
           if (this.$store.state.notification.success) {
-            this.$router.replace({ name: 'index' })
+            this.$router.replace({ name: 'builds' })
           }
         })
     },
