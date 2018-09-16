@@ -11,7 +11,6 @@
     </div>
   </v-container>
 </template>
-
 <script>
 export default {
   middleware: 'authenticated',

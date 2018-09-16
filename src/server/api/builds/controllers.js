@@ -4,18 +4,20 @@ import { ServerError } from 'express-server-error'
 export const index = {
   async get (req, res) {
     try {
-      let builds = await Build.find({})
+      let builds = await Build.find(req.query)
+        .limit(req.query.limit || 50)
+        .skip(req.query.skip || 0)
+
       if (!builds) throw new ServerError('No builds at this time')
       res.json(builds)
     } catch (error) {
-      res.hanldeServerError(error)
+      res.handleServerError(error)
     }
   },
 
   async post (req, res) {
     const build = new Build(req.body)
     build.user = req.user.email
-    console.log('build pre save: ', build)
     return build.save()
       .then((saved) => res.status(201).send({
         data: 'build created'

@@ -7,6 +7,18 @@
         <v-flex xs12>
           <v-container v-if="$store.state.user.isAuthenticated">
             <h1>Welcome {{ $store.state.user.username }}!</h1>
+            <v-list>
+              <v-list-tile 
+                v-for="(build, index) in $store.state.user.builds"
+                :key="index">
+                <v-list-tile-avatar>
+                  <v-icon>more_horiz</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-title>
+                  <nuxt-link class="routerlink" :to="url(build)">{{ build.name }}</nuxt-link>
+                </v-list-tile-title>
+              </v-list-tile>
+            </v-list>
           </v-container>
           <v-container fluid v-else align-center>
             <div class="text-xs-center pt-4">
@@ -25,6 +37,7 @@
                 or
                 <v-btn
                   outline
+                  dark
                   color="purple"
                   large
                   to="/users/auth/sign-in">Sign In
@@ -36,7 +49,6 @@
       </v-layout>
     </v-img>
 </template>
-
 <script>
 import vueniverseLogo from '~/assets/img/vueniverse_logo.svg'
 import header from '~/assets/img/header.jpg'
@@ -45,6 +57,14 @@ export default {
   data () {
     return {
       header
+    }
+  },
+  fetch ({ store }) {
+    return store.dispatch('fetchBuildsByUser')
+  },
+  methods: {
+    url: function (build) {
+      return `/builds/${build._id}`
     }
   }
 }

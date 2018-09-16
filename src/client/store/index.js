@@ -46,6 +46,16 @@ export const mutations = {
     Object.keys(state.lists).forEach(list => {
       state.lists[list] = []
     })
+  },
+  FETCH_USER_BUILDS_REQUEST (state) {
+    console.log('getting builds by user..')
+  },
+  FETCH_USER_BUILDS_SUCCESS (state, data) {
+    console.log('got user builds', data)
+    state.user.builds = data
+  },
+  FETCH_USER_BUILDS_FAILURE (state, error) {
+    console.log('error getting builds by user', error)
   }
 }
 export const actions = {
@@ -74,6 +84,19 @@ export const actions = {
       commit('FETCH_ALL_BUILDS_SUCCESS', data)
     } catch (error) {
       commit('FETCH_ALL_USERS_FAILURE', error)
+    }
+  },
+
+  async fetchBuildsByUser({ commit, state }) {
+    try {
+      commit('FETCH_USER_BUILDS_REQUEST')
+      let { data } = await axios.get('/builds/search', {
+        params: { search: state.user.email }
+      })
+      commit('FETCH_USER_BUILDS_SUCCESS', data.hits.hits)
+    } catch (error) {
+      console.log('Error getting builds for user: ', error)
+      commit('FETCH_USER_BUILDS_FAILURE', error)
     }
   }
 }

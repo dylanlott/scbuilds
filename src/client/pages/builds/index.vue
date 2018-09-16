@@ -24,9 +24,6 @@
 </template>
 <script>
 export default {
-  data () {
-    return {}
-  },
   fetch ({ store }) {
     return store.dispatch('fetchAllBuilds')
   },

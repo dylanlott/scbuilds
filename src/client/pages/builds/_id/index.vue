@@ -1,7 +1,10 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-title><h1 class="display-1">{{ build.name }}</h1></v-card-title>
+      <v-card-title><h1 class="display-1">{{ build.name }}</h1>
+        <v-spacer></v-spacer>
+        <v-btn outline v-if="build.user === $store.state.user.email">edit</v-btn>
+      </v-card-title>
       <v-card-text>
         <v-layout row wrap>
           <v-flex>comments: {{ build.meta.comments.length }}</v-flex>
@@ -35,15 +38,15 @@
                     <v-flex>
                       {{ step.action }}
                     </v-flex>
-
+                    &nbsp;
                     <v-flex>
                       @ {{ step.value }}
                     </v-flex>
-                    
+                    &nbsp;
                     <v-flex>
                       {{ step.type }}
                     </v-flex>
-
+                    &nbsp;
                     <v-flex>
                       {{ step.comment }}
                     </v-flex>
