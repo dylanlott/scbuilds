@@ -90,13 +90,15 @@ export const actions = {
   async fetchBuildsByUser({ commit, state }) {
     try {
       commit('FETCH_USER_BUILDS_REQUEST')
-      let { data } = await axios.get('/builds/search', {
-        params: { search: state.user.email }
+      let { data } = await axios.get('/builds', {
+        params: { user: state.user.email }
       })
-      commit('FETCH_USER_BUILDS_SUCCESS', data.hits.hits)
+      commit('FETCH_USER_BUILDS_SUCCESS', data)
     } catch (error) {
       console.log('Error getting builds for user: ', error)
       commit('FETCH_USER_BUILDS_FAILURE', error)
     }
   }
 }
+
+export const strict = false

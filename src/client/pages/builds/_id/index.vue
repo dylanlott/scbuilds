@@ -3,7 +3,9 @@
     <v-card>
       <v-card-title><h1 class="display-1">{{ build.name }}</h1>
         <v-spacer></v-spacer>
-        <v-btn outline v-if="build.user === $store.state.user.email">edit</v-btn>
+        <nuxt-link :to="edit">
+          <v-btn outline v-if="build.user === $store.state.user.email">edit</v-btn>
+        </nuxt-link>
       </v-card-title>
       <v-card-text>
         <v-layout row wrap>
@@ -83,7 +85,8 @@ export default {
     store.dispatch('build/getOneBuild', params.id)
   },
   computed: {
-    build () { return this.$store.state.build.details }
+    build () { return this.$store.state.build.details },
+    edit () { return `/builds/edit/${this.$store.state.build.details._id}` }
   }
 }
 </script>

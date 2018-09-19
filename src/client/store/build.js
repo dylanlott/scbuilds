@@ -42,6 +42,10 @@ export const mutations = {
 
   GET_BUILD_FAILURE (state, error) {
     console.log('Error getting build: ', error)
+  },
+  ADD_STEP (state, step) {
+    console.log('adding step', step)
+    state.details.steps.push(step)
   }
 }
 
@@ -90,5 +94,9 @@ export const actions = {
       commit('UPDATE_BUILD_FAILURE', error)
       commit('notification/FAILURE', error.response.data, { root: true })
     }
+  },
+
+  addStep ({ commit }, step) {
+    commit('ADD_STEP', step)
   }
 }

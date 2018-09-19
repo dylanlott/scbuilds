@@ -6,7 +6,12 @@
       <v-layout justify-center align-center>
         <v-flex xs12>
           <v-container v-if="$store.state.user.isAuthenticated">
-            <h1>Welcome {{ $store.state.user.username }}!</h1>
+            <v-flex my-3>
+              <h1>welcome {{ $store.state.user.username }}!</h1>
+            </v-flex>
+            <v-toolbar card>
+              <v-toolbar-title>your builds</v-toolbar-title>
+            </v-toolbar>
             <v-list>
               <v-list-tile 
                 v-for="(build, index) in $store.state.user.builds"
