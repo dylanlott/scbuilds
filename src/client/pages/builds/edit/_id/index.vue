@@ -7,74 +7,116 @@
           <v-card-text>
             <v-form>
               <v-text-field
+                outline
                 label="name"
                 :value="build.name"
+                v-model="build.name"
                 prepend-icon="place">
               </v-text-field>
-              <v-select
-                label="type"
-                :items="buildTypes"
-                :value="build.type"
-                prepend-icon="list"
-                ></v-select>
-            <v-flex xs12 sm6>
-              <v-layout row justify-center align-center fill-height>
-                <v-flex class="mr-3">
+            <v-flex>
+              <v-layout row wrap justify-space-between>
+                <v-flex xs12 sm4>
                   <v-select
+                    outline
                     :items="races"
                     label="player race"
                     :v-model="build.races.player"
                     :value="build.races.player"
                     prepend-icon="person"
-                  outline></v-select>
-              </v-flex>
-              <v-flex align-center justify-center fill-height>
-                vs
-              </v-flex>
-                <v-flex>
+                  ></v-select>
+                </v-flex>
+                <v-flex xs12 sm4>
                   <v-select
+                    outline
                     :items="races"
                     label="opponent race"
-                    v-model="build.races.opponent"
-                    value="build.races.opponent"
-                    prepend-icon="person"
-                    outline
+                    :v-model="build.races.opponent"
+                    :value="build.races.opponent"
+                    prepend-icon="arrow_right_alt person"
                   ></v-select>
+                </v-flex>
+                <v-flex xs12 sm4>
+                  <v-select
+                    outline
+                    label="type"
+                    :items="buildTypes"
+                    :menu-props="build.type"
+                    v-model="build.type"
+                    prepend-icon="list"
+                    ></v-select>
                 </v-flex>
               </v-layout>
             </v-flex>
 
             <!-- actions -->  
-            <v-flex>
-              <template> 
-                <v-data-table
-                  :headers="headers"
-                  :items="build.steps"
-                  hide-actions
-                  class="elevation-1">
-                  <template slot="items" slot-scope="props">
-                    <td class="handle" style="max-width: 28px;">::</td>
-                    <td>{{ props.item.action }}</td>
-                    <td class="text-xs-center">{{ props.item.value }}</td>
-                    <td class="text-xs-center">{{ props.item.type }}</td>
-                    <td class="text-xs-center">{{ props.item.comment }}</td>
-                  </template>
-                </v-data-table>
-              </template>
-            </v-flex>
+              <v-card width="100%">
+                <v-card-text>
+                <v-toolbar>
+                  <v-toolbar-title>Build Order</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn raised primary>add step</v-btn>
+                </v-toolbar>
+                <v-list>
+                  <draggable v-model="build.steps">
+                    <transition-group>
+                      <v-list-tile
+                        v-for="(step, index) in build.steps" 
+                        :key="index">
+                        <v-list-tile fill-height avatar @click="">
+                          <v-list-tile-action>
+                            ::
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                            <v-layout row wrap>
+                              <v-flex x12 sm3>
+                                <v-text-field single-line label="action" v-model="step.action" :value="step.action" ></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 sm2>
+                                <v-text-field single-line label="value" v-model="step.value" :value="step.value"></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 sm3>
+                                <v-select single-line label="type" :items="types" v-model="step.type" :value="step.type"></v-select>
+                              </v-flex>
+                              <v-flex xs12 sm2>
+                                <v-text-field single-line label="comment" :v-model="step.comment" :value="step.comment"></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 sm2>
+                                <v-btn @click="remove(index)" small icon outline round class="mt-2" color="red lighten-1">
+                                  <v-icon small>delete_outline</v-icon>
+                                </v-btn>
+                              </v-flex>
+                            </v-layout>
+                          </v-list-tile-content>
+                          <v-divider></v-divider>
+                        </v-list-tile>
+                      </v-list-tile>
+                    </transition-group>
+                  </draggable>
+                  <v-btn outline color="primary" @click="addStep()">add step</v-btn>
+                </v-list>
+                </v-card-text>
+              </v-card>
           </v-form>
-          <code>
-            {{ build }}
-          </code>
-          </v-card-text>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn 
+            @click="update(build)" 
+            color="primary">
+            Save
+          </v-btn>
+        </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
+    <code>
+      {{ build }}
+    </code>
   </v-container>
 </template>
 <script>
 import _ from 'lodash'
-import Sortable from 'sortablejs'
+import draggable from 'vuedraggable'
 
 export default {
   data () {
@@ -104,6 +146,12 @@ export default {
           align: 'center',
           sortable: false,
           value: 'comment'
+        },
+        {
+          text: 'edit',
+          align: 'center',
+          sortable: false,
+          value: 'edit'
         },
       ],
       races: [
@@ -147,18 +195,9 @@ export default {
       return this.$store.state.build.details 
     }
   },
-  mounted () {
-    console.log('mounted')
-    let table = document.querySelector(".v-datatable tbody")
-    let _self = this
-    Sortable.create(table, {
-      handle: ".handle",
-      onEnd({ newIndex, oldIndex }) {
-        const rowSelected = _self.build.steps.splice(oldIndex, 1)[0]
-        _self.build.steps.splice(newIndex, 0, rowSelected)
-      }
-    })
-  }, 
+  components: {
+    draggable
+  },
   methods: {
     addStep() {
       this.$store.dispatch('build/addStep', {
@@ -168,6 +207,19 @@ export default {
         comment: ''
       })
       console.log(this.build.steps)
+    },
+
+    toggle (item) {
+      console.log(!!item.disabled)
+      return !!item.disabled 
+    },
+
+    update (build) {
+      console.log('updating build: ', build)
+    },
+
+    remove (index) {
+      this.build.steps.splice(index, 1)
     }
   }
 }
