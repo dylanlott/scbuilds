@@ -84,10 +84,10 @@ export const actions = {
     }
   },
 
-  async updateBuild({ commit }, { id, build }) {
+  async updateBuild({ commit }, build) {
     try {
       commit('UPDATE_BUILD_REQUEST')
-      let { data } = await axios.put(`/builds/${id}`, build)
+      let { data } = await axios.put(`/builds/${build._id}`, build)
       commit('UPDATE_BUILD_SUCCESS')
       commit('notification/SUCCESS', 'Build updated', { root: true })
     } catch (error) {

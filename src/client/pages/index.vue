@@ -22,6 +22,9 @@
                 <v-list-tile-title>
                   <nuxt-link class="routerlink" :to="url(build)">{{ build.name }}</nuxt-link>
                 </v-list-tile-title>
+                <v-list-tile-title v-if="$store.state.user.builds == [] || !$store.state.user.builds">
+                  You haven't made any builds yet. <nuxt-link class="routerlink" to="">Create your first build!</nuxt-link>
+                </v-list-tile-title>
               </v-list-tile>
             </v-list>
           </v-container>
@@ -29,7 +32,7 @@
             <div class="text-xs-center pt-4">
               <v-flex>
                 <h1 class="text-xs-center display-4 font-weight-black">overlord</h1>
-                <h1 class="display-1">the starcraft build tracker, creator, and explorer.</h1>,
+                <h1 class="display-1">the starcraft build tracker, creator, and explorer.</h1>
               </v-flex>
               <v-flex>
                 <v-btn
@@ -39,11 +42,9 @@
                   large
                   to="/users/auth/sign-up">Sign Up
                 </v-btn>
-                or
                 <v-btn
-                  outline
                   dark
-                  color="purple"
+                  color="grey darken-1"
                   large
                   to="/users/auth/sign-in">Sign In
                 </v-btn>

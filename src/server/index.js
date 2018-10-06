@@ -1,6 +1,6 @@
 import { urlencoded, json } from 'body-parser'
 import cookieParser from 'cookie-parser'
-// import cors from 'cors'
+import cors from 'cors'
 import express from 'express'
 import mongoose from 'mongoose'
 import { Nuxt, Builder } from 'nuxt'
@@ -16,6 +16,7 @@ const app = express()
 // app.use(cors({
 //   origin: process.env.NOW_URL // fix this.
 // }))
+app.use(cors())
 app.use(urlencoded({ extended: false }))
 app.use(json())
 app.use(cookieParser())
@@ -40,6 +41,24 @@ app.use(nuxt.render)
 // setup the database connection
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.DB_URL, { useMongoClient: true })
+mongoose.connection.on('connected', () => {
+  console.log('mongoose connected')
+})
+
+mongoose.connection.on('error', (err) => {
+  console.log('error connection to mongoose: ', err)
+})
+
+mongoose.connection.on('disconnected', () => {
+  console.log('mongoose disconnected')
+})
+
+process.on('SIGINT', function() {
+  mongoose.connection.close(function () {
+    console.log('Mongoose default connection disconnected through app termination');
+    process.exit(0);
+  });
+});
 
 app.listen(process.env.PORT, process.env.HOST, err => {
   if (err) { console.log(err) }

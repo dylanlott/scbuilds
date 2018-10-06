@@ -20,8 +20,8 @@
                     outline
                     :items="races"
                     label="player race"
-                    :v-model="build.races.player"
-                    :value="build.races.player"
+                    v-model="build.races.player"
+                    :menu-props="build.races.player"
                     prepend-icon="person"
                   ></v-select>
                 </v-flex>
@@ -30,8 +30,8 @@
                     outline
                     :items="races"
                     label="opponent race"
-                    :v-model="build.races.opponent"
-                    :value="build.races.opponent"
+                    v-model="build.races.opponent"
+                    :menu-props="build.races.opponent"
                     prepend-icon="arrow_right_alt person"
                   ></v-select>
                 </v-flex>
@@ -47,55 +47,16 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-
-            <!-- actions -->  
-              <v-card width="100%">
-                <v-card-text>
-                <v-toolbar>
-                  <v-toolbar-title>Build Order</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-btn raised primary>add step</v-btn>
-                </v-toolbar>
-                <v-list>
-                  <draggable v-model="build.steps">
-                    <transition-group>
-                      <v-list-tile
-                        v-for="(step, index) in build.steps" 
-                        :key="index">
-                        <v-list-tile fill-height avatar @click="">
-                          <v-list-tile-action>
-                            ::
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-layout row wrap>
-                              <v-flex x12 sm3>
-                                <v-text-field single-line label="action" v-model="step.action" :value="step.action" ></v-text-field>
-                              </v-flex>
-                              <v-flex xs12 sm2>
-                                <v-text-field single-line label="value" v-model="step.value" :value="step.value"></v-text-field>
-                              </v-flex>
-                              <v-flex xs12 sm3>
-                                <v-select single-line label="type" :items="types" v-model="step.type" :value="step.type"></v-select>
-                              </v-flex>
-                              <v-flex xs12 sm2>
-                                <v-text-field single-line label="comment" :v-model="step.comment" :value="step.comment"></v-text-field>
-                              </v-flex>
-                              <v-flex xs12 sm2>
-                                <v-btn @click="remove(index)" small icon outline round class="mt-2" color="red lighten-1">
-                                  <v-icon small>delete_outline</v-icon>
-                                </v-btn>
-                              </v-flex>
-                            </v-layout>
-                          </v-list-tile-content>
-                          <v-divider></v-divider>
-                        </v-list-tile>
-                      </v-list-tile>
-                    </transition-group>
-                  </draggable>
-                  <v-btn outline color="primary" @click="addStep()">add step</v-btn>
-                </v-list>
-                </v-card-text>
-              </v-card>
+            <v-card width="100%">
+              <v-card-text>
+              <v-toolbar>
+                <v-toolbar-title>Build Order</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn raised primary>add step</v-btn>
+              </v-toolbar>
+              <BuildOrder :steps="build.steps"></BuildOrder>
+              </v-card-text>
+            </v-card>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -115,45 +76,12 @@
   </v-container>
 </template>
 <script>
-import _ from 'lodash'
-import draggable from 'vuedraggable'
+import BuildOrder from '../../../../components/builds/BuildOrder.vue'
 
 export default {
   data () {
     return {
-      headers: [
-        { text: 'drag', sortable: false },
-        {
-          text: 'action',
-          align: 'left',
-          sortable: false,
-          value: 'action'
-        },
-        {
-          text: 'value',
-          align: 'center',
-          sortable: false,
-          value: 'value'
-        },
-        {
-          text: 'type',
-          align: 'center',
-          sortable: false,
-          value: 'type'
-        },
-        {
-          text: 'comment',
-          align: 'center',
-          sortable: false,
-          value: 'comment'
-        },
-        {
-          text: 'edit',
-          align: 'center',
-          sortable: false,
-          value: 'edit'
-        },
-      ],
+      redirect: { name: 'builds' },
       races: [
         { text: 'zerg', value: 'zerg'},
         { text: 'protoss', value: 'protoss'},
@@ -178,13 +106,6 @@ export default {
         'general',
         'timing'
       ],
-      types: [
-        'minerals',
-        'gas',
-        'supply',
-        'time',
-        'units'
-      ],
     }
   },
   fetch({ store, params }) {
@@ -196,31 +117,19 @@ export default {
     }
   },
   components: {
-    draggable
+    BuildOrder
   },
   methods: {
-    addStep() {
-      this.$store.dispatch('build/addStep', {
-        action: '',
-        value: '',
-        type: '',
-        comment: ''
-      })
-      console.log(this.build.steps)
-    },
-
-    toggle (item) {
-      console.log(!!item.disabled)
-      return !!item.disabled 
-    },
-
     update (build) {
-      console.log('updating build: ', build)
+      this.$store.dispatch('build/updateBuild', build)
+        .then(() => {
+          this.$router.replace(this.redirect)
+          // if (this.$store.state.notification.success) {
+          //   this.$router.replace(this.redirect)
+          // }
+        })
     },
 
-    remove (index) {
-      this.build.steps.splice(index, 1)
-    }
   }
 }
 </script>

@@ -54,15 +54,22 @@ export const id = {
       if (!build) throw new ServerError('Build does not exist', {status:404})
       return res.status(200).json(build)
     } catch (error) {
+      console.log('error getting build by id: ', error)
       res.handleServerError(error)
     }
   },
 
   async update (req, res) {
     try {
-      res.send('not implemented')
+      Build.findByIdAndUpdate(req.body._id, req.body, {new: true}, function(err, updated) {
+        if (err) {
+          return res.handleServerError(err)
+        }
+        return res.json(updated)
+      })
     } catch (error) {
-      res.hanldeServerError(error)
+      console.log('error updating build: ', error)
+      res.handleServerError(error)
     }
   },
 
