@@ -3,15 +3,45 @@
     <v-flex xs12 xl6>
       <v-card>
         <v-toolbar>
-          <v-toolbar-title>Builds</v-toolbar-title>
+          <v-toolbar-title><h1>New Builds</h1></v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn flat to="/builds/create" color="purple">Create A Build</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card :key="build._id" v-for="build in $store.state.lists.builds">
+        <v-card>
+          <v-card-title><v-icon>sort</v-icon><h3>Filter</h3></v-card-title>
+          <v-btn @click="clear()">clear filter</v-btn>
+            <v-layout row wrap justify-center>
+              <v-flex mx-2>
+              <v-select
+                :items="races" 
+                label="player race"
+                v-model="filter.player"
+                v-on:change="updateBuilds()"
+                ></v-select>
+            </v-flex>
+            <v-flex mx-2>
+              <v-select
+                :items="races"  
+                label="opponent race"
+                v-model="filter.opponent"
+                v-on:change="updateBuilds()"
+                ></v-select>
+            </v-flex>
+            <v-flex mx-2>
+              <v-select
+                :items="buildTypes"
+                label="build type"
+                v-model="filter.type"
+                v-on:change="updateBuilds()"
+              ></v-select>
+            </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
+        <v-card :key="index" v-for="(build, index) in $store.state.lists.builds">
           <v-card-title class="font-weight-black">
-            <v-icon color="purple lighten-1">play_arrow</v-icon>
             <h2><nuxt-link
                 class="routerlink"
                 :to="url(build)"
@@ -23,14 +53,51 @@
   </v-container>
 </template>
 <script>
+import BuildList from '../../components/builds/BuildList.vue'
+
 export default {
+  data () {
+    return {
+      races: [
+        { text: 'zerg', value: 'zerg'},
+        { text: 'protoss', value: 'protoss'},
+        { text: 'terran', value: 'terran'},
+        { text: 'any', value: 'any'}
+      ],
+      buildTypes: [
+        'economy',
+        'rush',
+        'all-in',
+        'max-out',
+        'aggressive',
+        'fast-expand',
+        'general',
+        'timing'
+      ],
+      filter: {
+        player: '',
+        opponent: '',
+        type: '',
+      }
+    }
+  },
   fetch ({ store }) {
     return store.dispatch('fetchAllBuilds')
   },
   methods: {
     url: function (build) {
       return `/builds/${build._id}`
+    },
+    updateBuilds: function () {
+      console.log('gettings builds with filter', this.filter)
+      this.$store.dispatch('fetchAllBuilds', this.filter)
+    },
+    clear: function () {
+      this.filter = {}
     }
+  },
+  components: {
+    BuildList
   }
 }
 </script>

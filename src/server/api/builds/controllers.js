@@ -2,17 +2,66 @@ import Build from './models'
 import { ServerError } from 'express-server-error'
 
 export const index = {
-  async get (req, res) {
-    try {
-      let builds = await Build.find(req.query)
-        .limit(req.query.limit || 50)
-        .skip(req.query.skip || 0)
-
-      if (!builds) throw new ServerError('No builds at this time')
-      res.json(builds)
-    } catch (error) {
-      res.handleServerError(error)
+  get (req, res) {
+    const query = {
+      'races.player': req.query.player,
+      'races.opponent': req.query.opponent,
+      'type': req.query.type
     }
+
+    Object.keys(query)
+      .forEach((key) => (query[key] == null || query[key] == '') && delete query[key]);
+
+    Build.find(query)
+      .skip(req.query.skip || 0)
+      .limit(req.query.limit || 50)
+      .then(builds => {
+        if (!builds) {
+          return new ServerError('Error searching builds', {status: 500})
+        }
+        return res.status(200).json(builds)
+      })
+  },
+
+  async searchByRaces (req, res) {
+    console.log('req.query', req.query)
+    if (req.query === {}) {
+      console.log('NO QUERY')
+    }
+    const query = {
+      "bool": {
+        "should": [
+          { "match": { "races.player": req.query.player || 'terran' }},
+          { "match": { "races.opponent": req.query.opponent || 'terran'}},
+          { "match": { "type": req.query.type || 'rush'}}
+        ],
+        minimum_should_match: 0
+      }
+    }
+
+    const wildcardQuery = {
+      "wildcard": {
+        "races.player": req.query.player || "*"
+      },
+      "wildcard": {
+        "races.opponent": req.query.opponent || "*"
+      },
+      "wildcard": {
+        "type": req.query.type || "*"
+      }
+    }
+
+    Build.search(query,
+    {
+      hydrate: true
+    }, function (err, results) {
+      if (err) {
+        console.log('error searching build orders: ', err)
+        throw new ServerError('Error searching builds with ElasticSearch')
+      }
+      console.log(results)
+      return res.json(results.hits)
+    })
   },
 
   async post (req, res) {
@@ -80,4 +129,14 @@ export const id = {
       res.hanldeServerError(error)
     }
   }
+}
+
+function GetAll (req, res) {
+  Build.find()
+    .limit(req.query.limit || 50)
+    .skip(req.query.skip || 0)
+    .sort('-createdAt')
+    .then(builds => {
+      return res.status(200).json(builds)
+    })
 }

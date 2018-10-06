@@ -36,7 +36,7 @@ export const mutations = {
   },
   FETCH_ALL_BUILDS_SUCCESS (state, data) {
     console.log('got builds: ', data)
-    state.lists.builds = data
+    state.lists.builds = data.hits || data
   },
   FETCH_ALL_BUILDS_FAILURE (state, error) {
     console.error(error.response.data)
@@ -77,10 +77,12 @@ export const actions = {
     }
   },
 
-  async fetchAllBuilds ({ commit, state }) {
+  async fetchAllBuilds ({ commit, state }, filter) {
     try {
       commit('FETCH_ALL_BUILDS_REQUEST')
-      let { data } = await axios.get('/builds')
+      let { data } = await axios.get('/builds', {
+        params: filter
+      })
       commit('FETCH_ALL_BUILDS_SUCCESS', data)
     } catch (error) {
       commit('FETCH_ALL_USERS_FAILURE', error)
