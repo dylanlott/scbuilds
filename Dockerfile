@@ -1,10 +1,7 @@
-FROM node:8.6 AS build
-WORKDIR /app
+FROM node:9
+WORKDIR /app 
 COPY ./ /app
-RUN npm run build
-
-FROM node:8.6-alpine
-COPY --from=build /app /app
-WORKDIR /app
+RUN npm install && \
+  npm run build
 EXPOSE 3000
 CMD ["npm", "run", "start"]

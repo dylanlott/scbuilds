@@ -6,7 +6,8 @@ export const index = {
     const query = {
       'races.player': req.query.player,
       'races.opponent': req.query.opponent,
-      'type': req.query.type
+      'type': req.query.type,
+      'user': req.query.user
     }
 
     Object.keys(query)
@@ -24,10 +25,6 @@ export const index = {
   },
 
   async searchByRaces (req, res) {
-    console.log('req.query', req.query)
-    if (req.query === {}) {
-      console.log('NO QUERY')
-    }
     const query = {
       "bool": {
         "should": [
@@ -59,7 +56,6 @@ export const index = {
         console.log('error searching build orders: ', err)
         throw new ServerError('Error searching builds with ElasticSearch')
       }
-      console.log(results)
       return res.json(results.hits)
     })
   },
@@ -129,14 +125,4 @@ export const id = {
       res.hanldeServerError(error)
     }
   }
-}
-
-function GetAll (req, res) {
-  Build.find()
-    .limit(req.query.limit || 50)
-    .skip(req.query.skip || 0)
-    .sort('-createdAt')
-    .then(builds => {
-      return res.status(200).json(builds)
-    })
 }

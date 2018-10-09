@@ -4,6 +4,7 @@ dist
 node_modules
 secrets.json
 db
+now.json
 
 static/manifest*.json
 static/sw.js

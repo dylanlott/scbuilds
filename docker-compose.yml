@@ -1,18 +1,18 @@
 version: '3'
 
 services:
-  mongodb:
-    image: 'bitnami/mongodb:3.6'
+  mongo:
+    image: bitnami/mongodb:latest
     restart: always
     networks:
       - overlord
     ports:
       - "27017:27017"
     volumes:
-      - 'mongodb_data:/bitnami'
+      - scbuilds_mongodb_data:/bitnami
     environment:
       - MONGODB_USERNAME=shakezulaadmin
-      - MONGODB_PASSWORD=1vR6GPLwwrkeguLemZkAtvCcYjMWqVhoVvd4jqZcKeKbFHdbLB8tgsgGazZYSPyv
+      - MONGODB_PASSWORD=1vR6GPLwwrkeguLem
       - MONGODB_DATABASE=overlord
 
   app:
@@ -23,14 +23,26 @@ services:
     networks: 
       - overlord
     ports: 
-      - '3000:3000'
+      - "3000:3000"
     env_file:
-      - ./.prod.env
+      - .prod.env
+
+  redis:
+    image: redis
+    restart: always
+    networks:
+      - overlord
+    ports: 
+      - "6379:6379"
+    volumes:
+      - scbuilds_redis_data:/data
 
 networks:
   overlord:
     driver: bridge
 
 volumes:
-  mongodb_data:
+  scbuilds_mongodb_data:
+    driver: local
+  scbuilds_redis_data:
     driver: local
