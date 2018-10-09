@@ -8,14 +8,15 @@
         </nuxt-link>
       </v-card-title>
       <v-card-text>
-        <v-layout row wrap>
-          <v-flex>comments: {{ build.meta.comments.length }}</v-flex>
-          <v-flex>upvotes: {{ build.meta.upvotes || 0}}</v-flex>
-          <v-flex>downvotes: {{ build.meta.downvotes || 0 }}</v-flex>
+        <v-layout align-left row wrap>
+          <v-flex xs3 sm1>comments: {{ build.meta.comments.length }}</v-flex>
+          <v-flex xs3 sm1>upvotes: {{ build.meta.upvotes || 0}}</v-flex>
+          <v-flex xs3 sm1>downvotes: {{ build.meta.downvotes || 0 }}</v-flex>
         </v-layout>
         <v-layout row wrap>
           <v-flex>
-            <v-chip>{{ build.type }}</v-chip>
+            <v-chip label>{{ build.type }}</v-chip>
+            <v-chip label>{{ build.races.player }}</v-chip> vs <v-chip label>{{ build.races.opponent }}</v-chip>
           </v-flex>
           <v-flex>
             <v-chip   
@@ -25,11 +26,11 @@
             </v-chip>
           </v-flex>
         </v-layout>
-        <v-layout column>
-          <v-flex><h2>Analysis</h2></v-flex>
-          <v-flex v-html="build.analysis"></v-flex>
-          <v-flex><h2>Build Order</h2></v-flex>
-          <v-flex>
+        <v-layout column justify-space-around my-4>
+          <v-flex xs12><h2>Analysis</h2></v-flex>
+          <v-flex xs12 v-html="build.analysis"></v-flex>
+          <v-flex xs12><h2>Build Order</h2></v-flex>
+          <v-flex xs12>
             <v-list dense>
               <v-list-tile
                 v-for="(step, index) in build.steps"

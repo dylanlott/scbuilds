@@ -9,6 +9,30 @@
             <v-flex my-3>
               <h1>welcome {{ $store.state.user.username }}!</h1>
             </v-flex>
+            <v-layout row align-left>
+              <v-flex xs12 sm2>
+                <v-btn
+                  large
+                  outline
+                  color="primary lighten-1"
+                  router 
+                  to="/builds/create"
+                  >
+                  create a build
+                </v-btn>
+              </v-flex xs12 sm2>
+              <v-flex>
+                <v-btn
+                  router
+                  to="/builds"
+                  large
+                  outline
+                  color="primary lighten-1"
+                  >
+                  find new builds
+                </v-btn>
+              </v-flex>
+            </v-layout>
             <v-toolbar card>
               <v-toolbar-title>your builds</v-toolbar-title>
             </v-toolbar>

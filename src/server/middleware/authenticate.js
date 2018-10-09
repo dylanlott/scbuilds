@@ -14,7 +14,7 @@ blacklist.configure({
   store: {
     type: 'redis',
     client,
-    keyPrefix: 'vueniverse:'
+    keyPrefix: 'scbuilds:'
   }
 })
 
