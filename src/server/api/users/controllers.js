@@ -18,10 +18,10 @@ export const index = {
   },
   async post (req, res) {
     try {
-      let { username, email, firstName, lastName, password1, password2 } = req.body
+      let { username, email, password1, password2 } = req.body
       if (password1 === password2) {
         let password = await bcrypt.hash(password1, 10)
-        let newUser = new User({ username, email, firstName, lastName, password })
+        let newUser = new User({ username, email, password })
         let savedUser = await newUser.save()
         res.json({ message: `Thanks for signing up, ${savedUser.username}!` })
       } else {

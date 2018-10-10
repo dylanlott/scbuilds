@@ -14,6 +14,7 @@
                   outline
                   label="name" 
                   v-model="build.name"
+                  :rules="[rules.required]"
                 ></v-text-field>
               </v-flex>
               <v-flex>
@@ -22,6 +23,7 @@
                   :items="buildTypes"
                   label="build type"
                   v-model="build.type"
+                  :rules="[rules.required]"
                 ></v-select>
               </v-flex>
               <v-flex xs12 sm6>
@@ -31,6 +33,7 @@
                       :items="races"
                       label="player race"
                       v-model="build.races.player"
+                      :rules="[rules.required]"
                       outline>
                     </v-select>
                   </v-flex>
@@ -39,78 +42,21 @@
                       :items="races"
                       label="opponent race"
                       v-model="build.races.opponent"
+                      :rules="[rules.required]"
                       outline
                       ></v-select>
                   </v-flex>
                 </v-layout>
               </v-flex>
               <v-flex xs12 my-3>
-                <h2 class="font-weight-bold display-1">Steps</h2>
-                <p class="font-weight-thin">Add timings, make notes on supply, and walk through each step</p>
+                <h2 class="font-weight-bold display-1">Build Order</h2>
+                <p class="font-weight-thin">Add timings, make notes on supply, and walk through each step of your build order.</p>
                 <p class="font-weight-thin">Hit enter after filling out each step to add it.</p>
               </v-flex>
-              <v-flex>
-                <v-layout row wrap>
-                  <v-flex xs12 sm6 md3 lg2 mr-3>
-                    <v-text-field 
-                      box
-                      @keyup.enter="addStep(step)"
-                      label="action"
-                      v-model="step.action"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm5 md3 lg2 mr-3>
-                    <v-text-field 
-                      box
-                      @keyup.enter="addStep(step)"
-                      label="value" 
-                      v-model="step.value"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm5 md3 lg2 mr-3>
-                    <v-select
-                      box
-                      label="type"
-                      v-model="step.type"
-                      :items="types"
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6 md3 lg2 mr-3>
-                    <v-text-field 
-                      box
-                      @keyup.enter="addStep(step)"
-                      label="comment" 
-                      v-model="step.comment"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex>
-                  <v-btn color="purple lighten-1" outline large @click="addStep(step)">add step</v-btn>
-                </v-flex>
-                </v-layout>
+              <v-flex my-3>
+                <BuildOrder :steps="build.steps"></BuildOrder>
               </v-flex>
-              <v-flex>
-                <v-layout row wrap>
-                  <v-flex>
-                    <h3>Build Order</h3>
-                    <v-card dense v-for="(step, index) in steps" :key="index">
-                      <v-card-text>
-                        <v-layout column>
-                          <v-flex v-if="step.action" class="font-weight-bold">
-                            <v-icon small color="purple lighten-1">star</v-icon>
-                            {{ step.action }} 
-                            @ {{step.value}} 
-                            {{step.type}}
-                          </v-flex>
-                          <v-flex v-if="step.comment !== ''" class="font-weight-thin">{{ step.comment }}</v-flex>
-                          <v-flex v-if="steps.length === 0 || !steps">No steps added yet.</v-flex>
-                          <v-divider></v-divider>
-                        </v-layout>
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-              <v-flex>
+              <v-flex my-3>
                 <h3 class="font-weight-bold display-1">Analysis & Details</h3>
               </v-flex>
               <v-flex xs12>
@@ -153,6 +99,7 @@
 <script>
 import _ from 'lodash'
 import marked from 'marked'
+import BuildOrder from '../../../components/builds/BuildOrder.vue'
 
 export default {
   middleware: 'authenticated',
@@ -170,7 +117,10 @@ export default {
         races: {
           player: '',
           opponent: ''
-        }
+        },
+        steps: [],
+        type: '',
+        tags: []
       },
       buildTypes: [
         'economy',
@@ -183,7 +133,6 @@ export default {
         'timing'
       ],
       tag: '',
-      tags: [],
       stepTemplate: {
         action: '',
         value: '',
@@ -208,6 +157,11 @@ export default {
       actionRules: [v => !!v || 'action is required.'],
       typeRules: [v => !!v || 'type is required.'],
       valueRules: [v => !!v || 'value is required.'],
+      rules: {
+        required: v => !!v || 'this field is required',
+        length: v => !!v && v.length > 1 || 'must be longer than 1 character',
+        steps: v => !!v && v.length > 5 || 'build orders must have at least 5 steps.'
+      },
       actions: [],
     }
   },
@@ -216,15 +170,13 @@ export default {
       this.steps.push(this.stepTemplate)
     },
     submit () {
-      const _build = this.build
-      _build.steps = this.steps
-      console.log('Creating build...', _build)
-      this.$store.dispatch('build/createBuild', _build)
-        .then(() => {
-          if (this.$store.state.notification.success) {
-            this.$router.replace({ name: 'builds' })
-          }
-        })
+      console.log('Creating build...', build)
+      // this.$store.dispatch('build/createBuild', build)
+      //   .then(() => {
+      //     if (this.$store.state.notification.success) {
+      //       this.$router.replace({ name: 'builds' })
+      //     }
+      //   })
     },
     updateAnalysis () {
       _.debounce(function (e) {
@@ -243,6 +195,9 @@ export default {
         comment: ''
       }
     }
+  },
+  components: {
+    BuildOrder
   },
   computed: {
     compiledMarkdown: function () {

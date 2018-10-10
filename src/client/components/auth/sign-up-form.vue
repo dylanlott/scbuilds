@@ -23,16 +23,6 @@
           required
         ></v-text-field>
         <v-text-field
-          v-model="firstName"
-          label="First Name"
-          name="firstName"
-        ></v-text-field>
-        <v-text-field
-          v-model="lastName"
-          label="Last Name"
-          name="lastName"
-        ></v-text-field>
-        <v-text-field
           v-model="password1"
           name="password1"
           label="Password"
@@ -133,8 +123,6 @@ export default {
       this.$store.dispatch('user/signUp', {
         username: this.username,
         email: this.email,
-        firstName: this.firstName,
-        lastName: this.lastName,
         password1: this.password1,
         password2: this.password2
       }).then(() => {

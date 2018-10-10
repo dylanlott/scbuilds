@@ -40,7 +40,9 @@
                   <v-text-field single-line 
                     label="comment" 
                     :v-model="step.comment" 
-                    :value="step.comment"></v-text-field>
+                    :value="step.comment"
+                    @keyup.enter="addStep()"
+                    ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <v-btn 

@@ -37,6 +37,9 @@
               <v-toolbar-title>your builds</v-toolbar-title>
             </v-toolbar>
             <v-list>
+              <v-list-tile v-if="$store.state.user.builds.length === 0">
+                <v-list-tile-title>You haven't created a build yet! <nuxt-link to="/builds/create">Make now now</nuxt-link></v-list-tile-title>
+              </v-list-tile>
               <v-list-tile 
                 v-for="(build, index) in $store.state.user.builds"
                 :key="index">
@@ -45,9 +48,6 @@
                 </v-list-tile-avatar>
                 <v-list-tile-title>
                   <nuxt-link class="routerlink" :to="url(build)">{{ build.name }}</nuxt-link>
-                </v-list-tile-title>
-                <v-list-tile-title v-if="$store.state.user.builds == [] || !$store.state.user.builds">
-                  You haven't made any builds yet. <nuxt-link class="routerlink" to="">Create your first build!</nuxt-link>
                 </v-list-tile-title>
               </v-list-tile>
             </v-list>

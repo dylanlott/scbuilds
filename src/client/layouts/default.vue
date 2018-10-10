@@ -12,7 +12,7 @@
       <v-list class="main-list">
         <v-list-tile avatar tag="div">
           <v-list-tile-avatar>
-            <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+            <Gravatar width="85" default-img="retro" :email="$store.state.user.email" />
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -22,7 +22,7 @@
         </v-list-tile>
       </v-list>
       <v-list dense>
-        <v-list-tile to="/">
+        <v-list-tile router to="/">
           <v-list-tile-action>
             <v-icon>dashboard</v-icon>
           </v-list-tile-action>
@@ -42,7 +42,7 @@
     </v-navigation-drawer>
     <v-toolbar dark app fixed>
       <v-toolbar-side-icon dark color="purple lighten-1" v-if="$store.state.user.isAuthenticated" light @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>{{name}}</v-toolbar-title>
+      <v-toolbar-title><h2>{{name}}</h2></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left>
         <v-btn flat icon="icon" slot="activator" light>
@@ -58,12 +58,16 @@
           <v-list-tile ripple router to="/users/auth/sign-out" v-if="$store.state.user.isAuthenticated">
             <v-list-tile-title>Sign Out</v-list-tile-title>
           </v-list-tile>
+          <!-- 
           <v-list-tile ripple router to="/users">
             <v-list-tile-title>Users</v-list-tile-title>
           </v-list-tile>
+          -->
+          <!-- 
           <v-list-tile ripple router to="/admin" v-if="$store.state.user.admin">
             <v-list-tile-title>Admin</v-list-tile-title>
           </v-list-tile>
+          -->
         </v-list>
       </v-menu>
     </v-toolbar>
@@ -90,6 +94,8 @@
 
 <script>
 // search icons: https://material.io/icons/ asd
+import Gravatar from 'vue-gravatar' 
+
 export default {
   props: {
     source: String
@@ -100,6 +106,9 @@ export default {
       name: 'Overlord',
       right: null
     }
+  },
+  components: {
+    Gravatar
   },
   computed: {
     snackbar: {
