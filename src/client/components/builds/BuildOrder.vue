@@ -13,7 +13,6 @@
               <v-layout row wrap>
                 <v-flex x12 sm3>
                   <v-text-field 
-                    :rules="[valid.required]"
                     single-line 
                     label="action" 
                     v-model="step.action" 
@@ -21,7 +20,6 @@
                 </v-flex>
                 <v-flex xs12 sm2>
                   <v-text-field 
-                    :rules="[valid.required]"
                     single-line 
                     label="value" 
                     v-model="step.value" 
@@ -29,7 +27,6 @@
                 </v-flex>
                 <v-flex xs12 sm3>
                   <v-select 
-                    :rules="[valid.required]"
                     single-line 
                     label="type" 
                     :items="types" 
@@ -39,7 +36,7 @@
                 <v-flex xs12 sm2>
                   <v-text-field single-line 
                     label="comment" 
-                    :v-model="step.comment" 
+                    v-model="step.comment" 
                     :value="step.comment"
                     @keyup.enter="addStep()"
                     ></v-text-field>

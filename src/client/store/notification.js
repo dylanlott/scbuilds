@@ -11,6 +11,12 @@ export const state = () => {
   }
 }
 export const mutations = {
+  INFO (state, data) {
+    state.text = data
+    state.failure = true
+    state.snackbar = true
+    state.context = 'info'
+  },
   PENDING (state) {
     state.mode = 'info'
     state.pending = true
@@ -33,5 +39,14 @@ export const mutations = {
   },
   UPDATE_SNACKBAR (state, value) {
     state.snackbar = value
+  }
+}
+
+export const actions = {
+  async notification ({ commit }, alert) {
+    commit(`notification/${alert.type}`,
+      alert.data.message || alert.data,
+      { root: true }
+    )
   }
 }

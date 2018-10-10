@@ -16,6 +16,7 @@ export const index = {
     Build.find(query)
       .skip(req.query.skip || 0)
       .limit(req.query.limit || 50)
+      .sort('-createdAt')
       .then(builds => {
         if (!builds) {
           return new ServerError('Error searching builds', {status: 500})

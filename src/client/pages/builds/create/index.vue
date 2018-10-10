@@ -8,7 +8,7 @@
           </v-card-title>
           <v-card-text>
             <p class="font-weight-medium">Name your build and give it a type.</p>
-            <v-form>
+            <v-form ref="create">
               <v-flex>
                 <v-text-field
                   outline
@@ -84,7 +84,8 @@
                   @click="submit(build)"
                   color="purple lighten-1" 
                   block
-                  dark>
+                  dark
+                  >
                   create
                   <v-icon dark right>check_circle</v-icon>
                 </v-btn>
@@ -152,49 +153,28 @@ export default {
         value: '',
         comment: ''
       },
-      steps: [],
-      stepRules: [v => v.length > 0 || 'At least one step is required'],
-      actionRules: [v => !!v || 'action is required.'],
-      typeRules: [v => !!v || 'type is required.'],
-      valueRules: [v => !!v || 'value is required.'],
       rules: {
         required: v => !!v || 'this field is required',
         length: v => !!v && v.length > 1 || 'must be longer than 1 character',
         steps: v => !!v && v.length > 5 || 'build orders must have at least 5 steps.'
       },
-      actions: [],
     }
   },
   methods: {
-    addBlankStep () {
-      this.steps.push(this.stepTemplate)
-    },
     submit () {
-      console.log('Creating build...', build)
-      // this.$store.dispatch('build/createBuild', build)
-      //   .then(() => {
-      //     if (this.$store.state.notification.success) {
-      //       this.$router.replace({ name: 'builds' })
-      //     }
-      //   })
+      console.log('Creating build...', this.build)
+      this.$store.dispatch('build/createBuild', this.build)
+        .then(() => {
+          if (this.$store.state.notification.success) {
+            this.$router.replace({ name: 'builds' })
+          }
+        })
     },
     updateAnalysis () {
       _.debounce(function (e) {
         this.input = e.target.value
       }, 300)
     },
-    removeStep (index) {
-      return this.steps.splice(index, 1)
-    },
-    addStep (step) {
-      this.steps.push(step)
-      this.step = {
-        action: '',
-        type: '',
-        value: '',
-        comment: ''
-      }
-    }
   },
   components: {
     BuildOrder

@@ -49,6 +49,11 @@
               >{{ build.name }}</nuxt-link></h2>
             </v-card-title>
           </v-card>
+          <v-card v-if="$store.state.lists.builds.length < 1">
+            <v-card-title>
+              <h2>No builds match your filtering criteria. Try widening your filter.</h2>
+            </v-card-title>
+          </v-card>
         </v-card>
       </v-flex>
     </v-layout>

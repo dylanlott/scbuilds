@@ -71,7 +71,16 @@ export const username = {
     }
   },
   async post (req, res) {
-    res.json({ message: 'Update the user, and return the updated user.' })
+    try {
+      let user = await User.findOne({
+        username: req.params.username
+      })
+      if (!user) throw new ServerError(`User with username ${req.params.username} cannot be found.`, { status: 404 })
+      user = req.body
+      user.save()
+    } catch (err) {
+      res.handleServerError(err)
+    }
   },
   async delete (req, res) {
     try {
