@@ -12,6 +12,7 @@ router.use('/', handleServerErrors())
 router.use('/users', usersRoutes)
 router.use('/admin', authenticate(), adminRoutes)
 router.use('/builds', buildRoutes)
+router.get('/health', (req, res) => res.status(200).send('OK'))
 
 router.get('/', (req, res) => {
   res.json(listEndpoints(router))
