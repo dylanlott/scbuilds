@@ -10,4 +10,3 @@ Vue.use(Vuetify, {
     error: colors.red.accent3
   }
 })
-
