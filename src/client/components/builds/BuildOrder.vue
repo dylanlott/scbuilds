@@ -3,8 +3,7 @@
     <draggable>
       <transition-group>
         <v-list-tile
-          v-for="(step, index) in steps" 
-          :key="index">
+          v-for="(step, index) in steps" :key="step.id">
           <v-list-tile fill-height avatar @click="">
             <v-list-tile-action>
               ::
@@ -93,6 +92,7 @@ export default {
   methods: {
     addStep() {
       this.steps.push({
+        id: Date.now(),
         action: '',
         value: '',
         type: '',
