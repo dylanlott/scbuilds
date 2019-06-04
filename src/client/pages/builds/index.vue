@@ -16,7 +16,7 @@
               <v-layout row wrap justify-center>
                 <v-flex mx-2>
                 <v-select
-                  :items="races" 
+                  :items="races"
                   label="player race"
                   v-model="filter.player"
                   v-on:change="updateBuilds()"
@@ -24,7 +24,7 @@
               </v-flex>
               <v-flex mx-2>
                 <v-select
-                  :items="races"  
+                  :items="races"
                   label="opponent race"
                   v-model="filter.opponent"
                   v-on:change="updateBuilds()"

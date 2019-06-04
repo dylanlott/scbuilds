@@ -12,13 +12,13 @@
               <v-flex>
                 <v-text-field
                   outline
-                  label="name" 
+                  label="name"
                   v-model="build.name"
                   :rules="[rules.required]"
                 ></v-text-field>
               </v-flex>
               <v-flex>
-                <v-select 
+                <v-select
                   outline
                   :items="buildTypes"
                   label="build type"
@@ -54,7 +54,7 @@
                 <p class="font-weight-thin">Hit enter after filling out each step to add it.</p>
               </v-flex>
               <v-flex my-3>
-                <BuildOrder :steps="build.steps"></BuildOrder>
+                <BuildOrder :valid="validateSteps(build.steps)" :steps="build.steps"></BuildOrder>
               </v-flex>
               <v-flex my-3>
                 <h3 class="font-weight-bold display-1">Analysis & Details</h3>
@@ -63,7 +63,7 @@
                 <v-textarea
                   outline
                   @input="updateAnalysis"
-                  label="analysis" 
+                  label="analysis"
                   v-model="build.analysis"
                 ></v-textarea>
               </v-flex>
@@ -80,9 +80,9 @@
                 </template>
               </v-flex>
               <v-flex xs12 mt-4>
-                <v-btn 
+                <v-btn
                   @click="submit(build)"
-                  color="purple lighten-1" 
+                  color="purple lighten-1"
                   block
                   dark
                   >
@@ -163,12 +163,36 @@ export default {
   methods: {
     submit () {
       console.log('Creating build...', this.build)
-      this.$store.dispatch('build/createBuild', this.build)
-        .then(() => {
-          if (this.$store.state.notification.success) {
-            this.$router.replace({ name: 'builds' })
-          }
-        })
+      const validated = this.validateSteps(this.build.steps)
+      console.log('validated: ', validated)
+      // if (validated) {
+      //   console.log('validated build: ', validated)
+      // }
+      // if (!validated) {
+      //   this.$store.dispatch('notification/FAILURE', 'Steps are not valid.')
+      // }
+      // this.$store.dispatch('build/createBuild', this.build)
+        // .then(() => {
+          // if (this.$store.state.notification.success) {
+            // this.$router.replace({ name: 'builds' })
+          // }
+        // })
+    },
+    validateSteps(steps) {
+      console.log('validating steps: ', steps)
+      for(var i = 0; i < steps.length; i++) {
+        console.log('validating step: ', steps[i])
+        if (steps[i].type === "") {
+          return false
+        }
+        if (steps[i].action === "") {
+          return false
+        }
+        if (steps[i].value === "") {
+          return false
+        }
+        return true
+      }
     },
     updateAnalysis () {
       _.debounce(function (e) {

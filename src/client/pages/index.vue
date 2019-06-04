@@ -1,7 +1,7 @@
 <template>
     <v-img
       :src="header"
-      alt="overlord - the starcraft build order tool" 
+      alt="overlord - the starcraft build order tool"
       width="100%">
       <v-layout justify-center align-center>
         <v-flex xs12>
@@ -10,17 +10,17 @@
               <h1>welcome {{ $store.state.user.username }}!</h1>
             </v-flex>
             <v-layout row align-left>
-              <v-flex xs12 sm2>
+              <v-flex xs12 sm3>
                 <v-btn
                   large
                   outline
                   color="primary lighten-1"
-                  router 
+                  router
                   to="/builds/create"
                   >
                   create a build
                 </v-btn>
-              </v-flex xs12 sm2>
+              </v-flex xs12 sm3>
               <v-flex>
                 <v-btn
                   router
@@ -40,7 +40,7 @@
               <v-list-tile v-if="$store.state.user.builds.length === 0">
                 <v-list-tile-title>You haven't created a build yet! <nuxt-link to="/builds/create">Make now now</nuxt-link></v-list-tile-title>
               </v-list-tile>
-              <v-list-tile 
+              <v-list-tile
                 v-for="(build, index) in $store.state.user.builds"
                 :key="index">
                 <v-list-tile-avatar>
@@ -80,7 +80,6 @@
     </v-img>
 </template>
 <script>
-import vueniverseLogo from '~/assets/img/vueniverse_logo.svg'
 import header from '~/assets/img/header.jpg'
 
 export default {
