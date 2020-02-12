@@ -61,8 +61,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn 
-            @click="update(build)" 
+          <v-btn
+            @click="update(build)"
             color="primary">
             Save
           </v-btn>
@@ -70,9 +70,6 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <code>
-      {{ build }}
-    </code>
   </v-container>
 </template>
 <script>
@@ -112,8 +109,8 @@ export default {
     return store.dispatch('build/getOneBuild', params.id)
   },
   computed: {
-    build () { 
-      return this.$store.state.build.details 
+    build () {
+      return this.$store.state.build.details
     }
   },
   components: {
