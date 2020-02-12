@@ -24,7 +24,8 @@ const buildTypes = [
 const races = [
   'zerg',
   'protoss',
-  'terran'
+  'terran',
+  'any'
 ]
 
 const stepSchema = new mongoose.Schema({
